@@ -12,6 +12,11 @@ WORKDIR /var/www/html/
 
 COPY ./www.conf			  /etc/php/8.2/fpm/pool.d/
 COPY ./php.ini 			  /etc/php/8.2/cli/
-COPY ./tools/wp_init.sh		  ./
+#COPY ./tools/wp_init.sh		  ./
 
-CMD ["./wp_init.sh"]
+COPY tools/start-wordpress.sh /usr/local/bin/start-wordpress.sh
+
+RUN chmod +x /usr/local/bin/start-wordpress.sh
+
+CMD ["/usr/local/bin/start-wordpress.sh"]
+#CMD ["./wp_init.sh"]

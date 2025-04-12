@@ -3,7 +3,7 @@ COMPOSE = docker compose -f srcs/docker-compose.yml
 all: up
 
 up:
-	$(COMPOSE) up --build
+	$(COMPOSE) up
 
 build:
 	$(COMPOSE) build 
