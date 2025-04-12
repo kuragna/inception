@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! -f /var/www/html/wp-config.php ]; then
-  echo "WordPress is not installed. Installing now..."
+  echo "WordPress is not installed"
   
   wp core download --path=/var/www/html --allow-root
 
@@ -9,7 +9,6 @@ if [ ! -f /var/www/html/wp-config.php ]; then
   find /var/www/html -type d -exec chmod 755 {} \;
   find /var/www/html -type f -exec chmod 644 {} \;
 
-  echo "Creating WordPress configuration..."
   
   
   wp config create \
@@ -20,7 +19,6 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     --path=/var/www/html \
     --allow-root
 
-  echo "Installing WordPress..."
   wp core install \
     --url=https://${DOMAIN_NAME} \
     --title=${WORDPRESS_TITLE}\
@@ -35,8 +33,8 @@ if [ ! -f /var/www/html/wp-config.php ]; then
   find /var/www/html -type f -exec chmod 644 {} \;
   
   echo "WordPress installation completed!"
-else
-  echo "WordPress is already installed."
 fi
+
+echo "Starting wordpress"
 
 php-fpm8.2 --nodaemonize
