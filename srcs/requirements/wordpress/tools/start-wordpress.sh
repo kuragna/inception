@@ -10,7 +10,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
   find /var/www/html -type f -exec chmod 644 {} \;
 
   
-  
+  # setting database information
   wp config create \
     --dbname=${MYSQL_DATABASE} \
     --dbuser=${MYSQL_USER} \
@@ -26,6 +26,13 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     --admin_password=${WORDPRESS_ADMIN_PASSWORD} \
     --admin_email=${WORDPRESS_ADMIN_EMAIL} \
     --path=/var/www/html \
+    --allow-root
+
+  wp user create \
+    ${WORDPRESS_USER} \
+    ${WORDPRESS_USER_EMAIL} \
+    --user_pass=${WORDPRESS_USER_PASSWORD} \
+    --role="author" \
     --allow-root
   
   chown -R www-data:www-data /var/www/html
