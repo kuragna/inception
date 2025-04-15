@@ -1,13 +1,15 @@
 #!/bin/bash
 
-if [ ! -f /var/www/html/wp-config.php ]; then
-  echo "WordPress is not installed"
-  
-  wp core download --path=/var/www/html --allow-root
+WORDPRESS_PATH=/var/www/html
 
-  chown -R www-data:www-data /var/www/html
-  find /var/www/html -type d -exec chmod 755 {} \;
-  find /var/www/html -type f -exec chmod 644 {} \;
+if [ ! -f ${WORDPRESS_PATH}/wp-config.php ]; then
+
+  echo "WordPress is not installed"
+  wp core download --path=${WORDPRESS_PATH} --allow-root
+
+  chown -R www-data:www-data ${WORDPRESS_PATH}
+  find ${WORDPRESS_PATH} -type d -exec chmod 755 {} \;
+  find ${WORDPRESS_PATH} -type f -exec chmod 644 {} \;
 
   
   # setting database information
@@ -15,8 +17,8 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     --dbname=${MYSQL_DATABASE} \
     --dbuser=${MYSQL_USER} \
     --dbpass=${MYSQL_PASSWORD} \
-    --dbhost=${WORDPRESS_DB_HOST}\
-    --path=/var/www/html \
+    --dbhost=${WORDPRESS_DB_HOST} \
+    --path=${WORDPRESS_PATH} \
     --allow-root
 
   wp core install \
@@ -25,7 +27,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     --admin_user=${WORDPRESS_ADMIN_USER} \
     --admin_password=${WORDPRESS_ADMIN_PASSWORD} \
     --admin_email=${WORDPRESS_ADMIN_EMAIL} \
-    --path=/var/www/html \
+    --path=${WORDPRESS_PATH} \
     --allow-root
 
   wp user create \
@@ -35,13 +37,12 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     --role="author" \
     --allow-root
   
-  chown -R www-data:www-data /var/www/html
-  find /var/www/html -type d -exec chmod 755 {} \;
-  find /var/www/html -type f -exec chmod 644 {} \;
+  chown -R www-data:www-data ${WORDPRESS_PATH}
+  find ${WORDPRESS_PATH} -type d -exec chmod 755 {} \;
+  find ${WORDPRESS_PATH} -type f -exec chmod 644 {} \;
   
   echo "WordPress installation completed!"
 fi
 
 echo "Starting wordpress"
-
 php-fpm8.2 --nodaemonize

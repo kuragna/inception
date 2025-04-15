@@ -12,11 +12,11 @@ endef
 
 all: up
 
-up:
-	$(call create_dir_not_exists, $(VOLUME_WORDPRESS_PATH))
-	$(call create_dir_not_exists, $(VOLUME_MARIADB_PATH))
+up: build
 	$(COMPOSE) up
 build:
+	$(call create_dir_not_exists, $(VOLUME_WORDPRESS_PATH))
+	$(call create_dir_not_exists, $(VOLUME_MARIADB_PATH))
 	$(COMPOSE) build 
 
 down:
@@ -26,7 +26,7 @@ clean:
 	$(COMPOSE) down -v --remove-orphans --rmi all
 
 fclean: clean
-	sudo rm -fr ~/data/wordpress/* ~/data/mariadb/*
+	rm -fr ~/data/wordpress/* ~/data/mariadb/*
 	docker system prune -af 
 
 
