@@ -33,7 +33,7 @@
 mysqld_safe &
 
 until mysqladmin ping --silent; do
-  echo "Waiting for MariaDB to be available..."
+  echo "Mariadb not ready yet."
   sleep 2
 done
 
@@ -47,5 +47,5 @@ FLUSH PRIVILEGES;
 EOF
 
 mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
-
+echo "Starting mariadb"
 mysqld
