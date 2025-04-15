@@ -1,10 +1,21 @@
 COMPOSE = docker compose -f srcs/docker-compose.yml
+VOLUME_MARIADB_PATH = $(HOME)/data/mariadb
+VOLUME_WORDPRESS_PATH = $(HOME)/data/wordpress
+
+define create_dir_not_exists
+	@if [ ! -d $(1) ]; then \
+		mkdir -p $(1) && echo "$(1): Created"; \
+	else \
+		echo "$(1): Already Exists"; \
+	fi
+endef
 
 all: up
 
 up:
+	$(call create_dir_not_exists, $(VOLUME_WORDPRESS_PATH))
+	$(call create_dir_not_exists, $(VOLUME_MARIADB_PATH))
 	$(COMPOSE) up
-
 build:
 	$(COMPOSE) build 
 
@@ -18,6 +29,7 @@ fclean: clean
 	sudo rm -fr ~/data/wordpress/* ~/data/mariadb/*
 	docker system prune -af 
 
+
 re: fclean all
 
-.PHONY: all up down clean re 
+.PHONY: all up down clean fclean re 
